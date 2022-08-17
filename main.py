@@ -77,6 +77,17 @@ class Tarefa(Resource):
 
         return response
 
+    @marshal_with(resource_fields)
+    def delete(self, tarefa_id):
+        response = TarefaModel.query.filter_by(id=tarefa_id).first()
+        if not response:
+            abort(404, message='Tarefa não encontrada.')
+
+        db.session.delete(response)
+        db.session.commit()
+
+        return response
+
 
 class TodasTarefas(Resource):
     def get(self):
